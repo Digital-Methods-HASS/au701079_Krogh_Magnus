@@ -1,0 +1,53 @@
+---
+title: "european.stadiums"
+author: "Magnus Krogh"
+date: "2023-01-05"
+output: html_document
+---
+
+# Required packages
+
+```{r setup,E}
+library(leaflet)
+library(htmlwidgets)
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Reading data 
+
+```{r}
+Stadiums <- read_csv2("data/Euro_stadiums.csv")
+```
+
+#checking the outlook 
+
+```{r}
+glimpse(Stadiums)
+```
+
+
+#make map 
+ 
+```{r}
+leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(lng = Stadiums$Longitude, 
+             lat = Stadiums$Latitude,
+             popup = Stadiums$Stadium)
+```
+
+# add details to markers
+
+```{r}
+leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(lng=Stadiums$Longitude,
+             lat = Stadiums$Latitude,
+             popup = paste('<b>',Stadiums$Stadium,Stadiums$Year,'</b>','<br>',Stadiums$City,",",Stadiums$Country,'<br>',"Capacity:",Stadiums$Capacity),
+             clusterOptions = markerClusterOptions())
+```
+
